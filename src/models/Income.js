@@ -18,5 +18,5 @@ const incomeSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now }
 },{timestamps:true})
 
-const Income = mongoose.model("User", incomeSchema);
+const Income = mongoose.model("Income", incomeSchema);
 module.exports = Income;

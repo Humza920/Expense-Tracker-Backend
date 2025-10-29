@@ -1,4 +1,3 @@
-const express = require("express")
 const Income = require("../models/Income")
 const xlsx = require("xlsx");
 
@@ -17,7 +16,7 @@ exports.addIncome = async (req, res) => {
         if (!icon || !source || !amount) {
             return res.status(400).json({ success: false, message: "Please fill all required fields" });
         }
-        const income = await User.create({
+        const income = await Income.create({
             userId,
             icon,
             source,
@@ -44,7 +43,9 @@ exports.getAllIncome = async (req, res) => {
                 message: "Unauthorized access. User not found in request.",
             });
         }
-        const getincomes = await Income.find({user:userId}).sort({ date: -1 })
+        const getincomes = await Income.find({userId:userId}).sort({ date: -1 })
+
+        
         res.json(getincomes);
 
     } catch (error) {
@@ -92,6 +93,7 @@ exports.downloadIncomeExcel = async (req, res) => {
 
         // Send file to user
         res.download(filePath);
+        
 
     } catch (error) {
         res.status(500).json({ message: error.message });

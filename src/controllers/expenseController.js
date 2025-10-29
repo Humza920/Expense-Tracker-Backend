@@ -37,7 +37,7 @@ exports.addExpense = async (req, res) => {
 }
 
 // Get all Expenses
-exports.getAllExpenses = async (req, res) => {
+exports.getAllExpense = async (req, res) => {
     try {
         const userId = req.user?._id;
 

@@ -43,9 +43,9 @@ exports.getAllIncome = async (req, res) => {
                 message: "Unauthorized access. User not found in request.",
             });
         }
-        const getincomes = await Income.find({userId:userId}).sort({ date: -1 })
+        const getincomes = await Income.find({ userId: userId }).sort({ date: -1 })
 
-        
+
         res.json(getincomes);
 
     } catch (error) {
@@ -72,28 +72,29 @@ exports.downloadIncomeExcel = async (req, res) => {
             });
         }
 
-        // Fetch user incomes and sort descending by date
-        let getincomes = await Income.find({ user: userId }).sort({ date: -1 });
+        let getincomes = await Income.find({ userId }).sort({ date: -1 });
 
-        // Map to only required fields
+
         getincomes = getincomes.map((income) => ({
             source: income.source,
             amount: income.amount,
             date: income.date
         }));
 
-        // Create workbook & sheet
+        console.log(getincomes);
+
+
         const wb = xlsx.utils.book_new();
         const ws = xlsx.utils.json_to_sheet(getincomes);
         xlsx.utils.book_append_sheet(wb, ws, "INCOME");
 
-        // Write Excel file
+
         const filePath = "income_details.xlsx";
         xlsx.writeFile(wb, filePath);
 
-        // Send file to user
+
         res.download(filePath);
-        
+
 
     } catch (error) {
         res.status(500).json({ message: error.message });

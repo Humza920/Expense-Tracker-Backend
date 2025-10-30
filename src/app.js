@@ -10,7 +10,7 @@ const dashboardRouter = require("./routes/dashboardRoutes")
 const app = express()
 app.use(express.json())
 app.use(cors({
-    origin: "https://expense-tracker-frontend-dj1s.vercel.app/",
+    origin: "https://expense-tracker-frontend-dj1s.vercel.app",
     credentials:true
 }))
 app.use(cookieParser())

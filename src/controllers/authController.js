@@ -94,7 +94,11 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
-    res.clearCookie("token", { httpOnly: true, secure: process.env.NODE_ENV === "production" });
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",  // required for cross-site cookie deletion
+    });
     res.json({ success: true, message: "Logout Successful" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

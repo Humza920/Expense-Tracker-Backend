@@ -61,39 +61,3 @@ exports.deleteIncome = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-
-exports.downloadIncomeExcel = async (req, res) => {
-  try {
-    const userId = req.user?._id;
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized access. User not found in request.",
-      });
-    }
-
-    let getincomes = await Income.find({ userId }).sort({ date: -1 });
-
-    getincomes = getincomes.map((income) => ({
-      source: income.source,
-      amount: income.amount,
-      date: income.date,
-    }));
-
-    console.log(getincomes);
-
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.json_to_sheet(getincomes);
-    xlsx.utils.book_append_sheet(wb, ws, "INCOME");
-
-    const filePath = "income_details.xlsx";
-    xlsx.writeFile(wb, filePath);
-
-    res.download(filePath);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-

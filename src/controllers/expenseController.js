@@ -65,37 +65,6 @@ exports.deleteExpense = async (req, res) => {
     }
 }
 
-exports.downloadExpenseExcel = async (req, res) => {
-  try {
-    const userId = req.user?._id;
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized access. User not found in request.",
-      });
-    }
-
-    let getExpenses = await Expense.find({ userId }).sort({ date: -1 });
-
-    getExpenses = getExpenses.map((expense) => ({
-      category: expense.category,
-      amount: expense.amount,
-      date: expense.date,
-    }));
-
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.json_to_sheet(getExpenses);
-    xlsx.utils.book_append_sheet(wb, ws, "EXPENSES");
-
-    const filePath = "expense_details.xlsx";
-    xlsx.writeFile(wb, filePath);
-
-    res.download(filePath);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
 
 

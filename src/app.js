@@ -11,7 +11,7 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-    origin: "https://expense-tracker-frontend-dj1s.vercel.app",
+    origin: "https://expense-tracker-frontend-seven-lyart.vercel.api",
     credentials:true
 }))
 

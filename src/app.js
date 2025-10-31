@@ -12,7 +12,9 @@ app.use(express.json())
 
 app.use(cors({
     origin: "https://expense-tracker-frontend-dj1s.vercel.app",
-    credentials:true
+    credentials:true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }))
 
 

@@ -61,8 +61,6 @@ exports.deleteIncome = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-const xlsx = require("xlsx");
-const { Income } = require("../models/Income");
 
 exports.downloadIncomeExcel = async (req, res) => {
   try {

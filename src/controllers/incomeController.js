@@ -89,7 +89,7 @@ exports.downloadIncomeExcel = async (req, res) => {
     const ws = xlsx.utils.json_to_sheet(getincomes);
     xlsx.utils.book_append_sheet(wb, ws, "INCOME");
 
-    const filePath = "/tmp/income_details.xlsx";
+    const filePath = "income_details.xlsx";
     xlsx.writeFile(wb, filePath);
 
     res.download(filePath);

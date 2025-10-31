@@ -67,6 +67,7 @@ const { Income } = require("../models/Income");
 exports.downloadIncomeExcel = async (req, res) => {
   try {
     const userId = req.user?._id;
+
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -74,33 +75,24 @@ exports.downloadIncomeExcel = async (req, res) => {
       });
     }
 
-    let getIncomes = await Income.find({ userId }).sort({ date: -1 });
-    getIncomes = getIncomes.map((income) => ({
+    let getincomes = await Income.find({ userId }).sort({ date: -1 });
+
+    getincomes = getincomes.map((income) => ({
       source: income.source,
       amount: income.amount,
       date: income.date,
     }));
 
+    console.log(getincomes);
+
     const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.json_to_sheet(getIncomes);
+    const ws = xlsx.utils.json_to_sheet(getincomes);
     xlsx.utils.book_append_sheet(wb, ws, "INCOME");
 
-    // Generate Excel file in memory
-    const excelBuffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
+    const filePath = "/tmp/income_details.xlsx";
+    xlsx.writeFile(wb, filePath);
 
-    // ✅ Set CORS headers manually before sending the file
-    res.setHeader("Access-Control-Allow-Origin", "https://expense-tracker-frontend-dj1s.vercel.app");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=income_details.xlsx"
-    );
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-
-    res.send(excelBuffer);
+    res.download(filePath);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

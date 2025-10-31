@@ -85,10 +85,11 @@ exports.downloadExpenseExcel = async (req, res) => {
     const ws = xlsx.utils.json_to_sheet(getExpenses);
     xlsx.utils.book_append_sheet(wb, ws, "EXPENSES");
 
-    // Generate Excel file in memory
     const excelBuffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
 
-    // Send buffer as download
+    // ✅ Set CORS headers manually
+    res.setHeader("Access-Control-Allow-Origin", "https://expense-tracker-frontend-dj1s.vercel.app");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=expense_details.xlsx"
@@ -97,9 +98,11 @@ exports.downloadExpenseExcel = async (req, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
+
     res.send(excelBuffer);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 

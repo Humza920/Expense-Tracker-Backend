@@ -88,7 +88,9 @@ exports.downloadIncomeExcel = async (req, res) => {
     // Generate Excel file in memory
     const excelBuffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
 
-    // Send buffer as download
+    // ✅ Set CORS headers manually before sending the file
+    res.setHeader("Access-Control-Allow-Origin", "https://expense-tracker-frontend-dj1s.vercel.app");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=income_details.xlsx"
@@ -97,9 +99,11 @@ exports.downloadIncomeExcel = async (req, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
+
     res.send(excelBuffer);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 

@@ -10,14 +10,17 @@ const dashboardRouter = require("./routes/dashboardRoutes")
 const app = express()
 app.use(express.json())
 
-app.use(cors())
+app.use(cors({
+    origin: "https://expense-tracker-frontend-seven-lyart.vercel.app",
+    credentials: true,
+}))
 
 
 app.use(cookieParser())
-app.use("/api/auth" , authRouter)
-app.use("/api/income" , incomeRouter)
-app.use("/api/expense" , expenseRouter)
-app.use("/api/dashboard" , dashboardRouter)
+app.use("/api/auth", authRouter)
+app.use("/api/income", incomeRouter)
+app.use("/api/expense", expenseRouter)
+app.use("/api/dashboard", dashboardRouter)
 
 
 

@@ -2,9 +2,13 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 const generateToken = require("../utils/generatetoken");
+const {uploadToCloudinary} = require("../config/cloudinary")
 
 exports.register = async (req, res) => {
-  const { fullName, emailAddress, password, profileImg } = req.body;
+  const { fullName, emailAddress, password, } = req.body;
+  const file = req.file
+  console.log(file);
+  
 
   try {
     if (!fullName || !emailAddress || !password) {
@@ -29,11 +33,14 @@ exports.register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, Number(process.env.SALTED_ROUNDS));
 
+    const uploadResult = await uploadToCloudinary(file.buffer)
+
+
     const user = await User.create({
       fullName,
       emailAddress,
       password: hashedPassword,
-      profileImg,
+      profileImg:uploadResult.secure_url
     });
 
     const token = await generateToken(user._id);
